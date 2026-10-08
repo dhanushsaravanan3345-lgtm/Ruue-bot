@@ -1,0 +1,145 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -656,
+        0
+      ],
+      "id": "41e00c6c-da53-4c78-bd49-e2fa29ad4bf8",
+      "name": "Telegram Trigger",
+      "webhookId": "241ff69f-fb5d-459e-acf1-2326c641e3d9",
+      "credentials": {
+        "telegramApi": {
+          "id": "RP3Dc3pCLGeMExrX",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "7994230037",
+        "text": "=   {{ $('AI Agent').first().json.output }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -128,
+        16
+      ],
+      "id": "293eaf0b-93bc-409d-8fab-c0db5975039b",
+      "name": "Send a text message",
+      "webhookId": "befdcd42-fe15-4647-896c-b574c300b988",
+      "credentials": {
+        "telegramApi": {
+          "id": "RP3Dc3pCLGeMExrX",
+          "name": "Telegram account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=                                              {{ $('Telegram Trigger').item.json.message.text }}",
+        "options": {
+          "systemMessage": "   You are a helpful assistant. Reply in plain text only. Keep every answer under 150 words. Do not use markdown symbols like ** or ###."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -432,
+        -80
+      ],
+      "id": "9ee1f12f-efb1-44d9-806e-03889c2da14b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -448,
+        144
+      ],
+      "id": "eef37abb-e106-4c9c-ad47-045cec3c9556",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "px4DQ3Hd3LPCITV7",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "4ed0f068-e09c-4221-b08d-fa5da3f0b7ae",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fc3a9dd66add3b033c1256224396316b9467bb83a09c9fac8413978f0372aa98"
+  },
+  "nodeGroups": [],
+  "id": "ECTEmDmsKal77m3b",
+  "tags": []
+}
